@@ -1,10 +1,17 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
-const createToken = async (user) => {
-    const token = jwt.sign(
-        { userID: user.id, userRole: user.userRole, isLoggedIn: true },
-        process.env.JWT_SECRET
-    );
-    return token;
+interface User {
+  id: number;
+  userRole: string;
+}
+
+const createToken = (user: User): string => {
+  const token = jwt.sign(
+    { userID: user.id, userRole: user.userRole, isLoggedIn: true },
+    process.env.JWT_SECRET as string
+  );
+  return token;
 };
-module.exports = createToken;
+
+export default createToken;
+// module.exports = createToken;

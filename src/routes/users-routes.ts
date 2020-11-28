@@ -1,4 +1,6 @@
-const express = require("express");
+import express, { Router } from "express";
+
+// const express = require("express");
 const UserController = require("../controllers/userController");
 const validateUserLoginRequest = require("../middlewares/valUserLoginReq");
 // custom user middlewares
@@ -8,31 +10,31 @@ const validateUserEditRequirements = require("../middlewares/valUserEditReqs");
 const restrict = require("../middlewares/auth_restrict");
 const { catchErrors } = require("../middlewares/errorHandlers");
 
-const router = express.Router();
+const router: Router = express.Router();
 
 router.post(
-    "/",
-    validateRequestBody(["username", "password", "email", "userRole"]),
-    createUserRequirements,
-    catchErrors(UserController.registerUser)
+  "/",
+  validateRequestBody(["username", "password", "email", "userRole"]),
+  createUserRequirements,
+  catchErrors(UserController.registerUser)
 );
 router.get("/:id", catchErrors(UserController.getUser));
 router.post(
-    "/auth/login",
-    validateRequestBody(["email", "password"]),
-    validateUserLoginRequest(),
-    catchErrors(UserController.loginUser)
+  "/auth/login",
+  validateRequestBody(["email", "password"]),
+  validateUserLoginRequest(),
+  catchErrors(UserController.loginUser)
 );
 // must be signed in to edit or delete
 router.put(
-    "/:id",
-    restrict(),
-    validateUserEditRequirements,
-    catchErrors(UserController.editUser)
+  "/:id",
+  restrict(),
+  validateUserEditRequirements,
+  catchErrors(UserController.editUser)
 );
 router.delete("/:id", restrict(), catchErrors(UserController.deleteUser));
 
 // logout
 router.post("/logout", restrict(), catchErrors(UserController.logoutUser));
 
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const express = require("express");
+import express, { Router } from "express";
 const DonoController = require("../controllers/donationController");
 // donoControl
 const validateRequestBody = require("../middlewares/validateRequestBody");
@@ -7,25 +7,25 @@ const restrict = require("../middlewares/auth_restrict");
 const { catchErrors } = require("../middlewares/errorHandlers");
 
 // create routes
-const router = express.Router();
+const router: Router = express.Router();
 // find donos by projectID
 router.get("/projects/:projectID", catchErrors(DonoController.findByProjectID));
 
 // donate
 router.post(
-	"/projects/:projectID",
-	restrict(),
-	validateRequestBody(["donationAmount", "projectID"]),
-	catchErrors(DonoController.addDonation)
+  "/projects/:projectID",
+  restrict(),
+  validateRequestBody(["donationAmount", "projectID"]),
+  catchErrors(DonoController.addDonation)
 );
 // find donos by userID
 router.get(
-	"/users/:userID",
-	restrict(),
-	catchErrors(DonoController.findByUserID)
+  "/users/:userID",
+  restrict(),
+  catchErrors(DonoController.findByUserID)
 );
 // find donos by donoID
 router.get("/:id", restrict(), catchErrors(DonoController.findByID));
 
 // export routes
-module.exports = router;
+export default router;
